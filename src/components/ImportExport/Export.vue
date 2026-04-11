@@ -51,7 +51,7 @@ onMounted(() => {
         medium
         tag="a"
         :href
-        download="mullvad-browser-extension-settings.json"
+        download="mullvad-foxenhanced-settings.json"
         >Export</n-button
       >
     </n-card>

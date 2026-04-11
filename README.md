@@ -1,18 +1,61 @@
-![ci](https://github.com/mullvad/browser-extension/actions/workflows/ci.yml/badge.svg)
+# Mullvad FoxEnhanced
 
-# Mullvad Browser Extension
+Mullvad FoxEnhanced is an unofficial, Firefox-first fork of the Mullvad Browser Extension.
 
-Mullvad Browser Extension is a Firefox extension improving your browser experience while using
-Mullvad VPN. It also displays information about the connection, recommends optimal DNS settings, and
-a one-click access to [proxy servers](https://mullvad.net/en/help/socks5-proxy/).
+> [!IMPORTANT]
+> Mullvad FoxEnhanced is intended to behave 1:1 with the official Mullvad extension by default.
+> This fork only adds cautious, reviewed patches to improve the experience for Firefox users.
+> Upstream behavior remains the baseline, and any extra functionality should stay additive,
+> manually consented, and configurable.
+
+The goal of this fork is not to weaken Mullvad's privacy standards or ship surprise behavior. The
+goal is to preserve the official extension's defaults and baseline behavior while making room for
+extra features that some Firefox users may want.
+
+Current FoxEnhanced versioning:
+
+- FoxEnhanced patch version: `0.0.1`
+- upstream Mullvad extension version: inherited from upstream `package.json` and manifest
+
+FoxEnhanced patch metadata is intentionally kept separate from the upstream-owned extension version.
+That keeps future pulls from the official Mullvad repository easier to merge, because the Mullvad
+team remains the source of truth for the main extension version fields.
+
+This repository is intended to behave like a patch layer on top of the official extension. The main
+branch should track the latest official Mullvad updates, with FoxEnhanced changes maintained as a
+small, reviewable set of patches on top.
+
+## Fork principles
+
+- upstream defaults stay the defaults here
+- extra functionality should be additive, manually consented, and configurable
+- Firefox desktop usage is the primary product target
+- the main branch should always pull in the latest official Mullvad extension updates
+- this fork is not affiliated with or endorsed by Mullvad VPN AB
 
 ## Download
 
-You can visit our [download page](https://mullvad.net/en/download/browser/extension) to get the
-latest release.
+This repository is intended to be built locally for now:
 
-The extension is also available here on Github in the
-[Releases](https://github.com/mullvad/browser-extension/releases).
+- run `npm run build`
+- run `npm run pack:xpi`
+- load the generated `.xpi` temporarily in Firefox from `about:debugging#/runtime/this-firefox`
+
+If you need the official Mullvad release instead of this fork, use Mullvad's official download page:
+[Mullvad Browser Extension download](https://mullvad.net/en/download/browser/extension).
+
+## Upstream relationship
+
+This project is based on the official upstream repository:
+
+- source: [mullvad/browser-extension](https://github.com/mullvad/browser-extension)
+- upstream releases: [GitHub Releases](https://github.com/mullvad/browser-extension/releases)
+
+The codebase remains GPL-licensed. However, upstream branding and logos belong to Mullvad. This
+fork therefore identifies itself as an unofficial fork and uses distinct fork artwork.
+
+From a maintenance perspective, this repository should be treated as an enhancement layer over the
+official extension rather than a long-lived divergence from it.
 
 ## Development
 
@@ -74,7 +117,7 @@ local storage). It will require some manual configuration:
 
 ## Permissions
 
-Mullvad Browser Extension requires the following permissions:
+Mullvad FoxEnhanced keeps the same default permissions as the upstream Mullvad extension:
 
 - `management` to be able to recommend third party extensions
 - `privacy` to disable webRTC and check HTTPS-Only status
@@ -105,4 +148,5 @@ _External links are marked with this icon_
 
 ## Source code
 
-Source code is available in the [Github repo](https://github.com/mullvad/browser-extension).
+Source code for the upstream project is available in the
+[official Github repo](https://github.com/mullvad/browser-extension).
