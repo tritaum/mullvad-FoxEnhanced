@@ -1,5 +1,5 @@
-Mullvad Browser Extension as a whole is presently Licensed GPL v3+, except for the parts specified
-below:
+Mullvad FoxEnhanced is an unofficial fork of Mullvad Browser Extension. This fork as a whole is
+presently licensed GPL v3+, except for the parts specified below:
 
 - Open Sans | [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 - Source Sans Pro |
