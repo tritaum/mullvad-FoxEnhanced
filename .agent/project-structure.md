@@ -8,6 +8,7 @@
 |   |-- background/
 |   |-- components/
 |   |-- composables/
+|   |-- fox-enhancements/
 |   |-- helpers/
 |   |-- options/
 |   |-- popup/
@@ -67,6 +68,20 @@ Typical responsibilities:
 
 When a component starts holding too much logic, this is usually the first place to extract it to.
 
+### `src/fox-enhancements/`
+
+Fork-owned extension-point layer. This is the preferred home for FoxEnhanced bootstrap hooks,
+transforms, wrappers, and additive modules.
+
+Current role:
+
+- define typed FoxEnhanced hook registries
+- keep bootstrap entrypoints out of feature code
+- provide a clear place for future fork-specific patches to register themselves
+
+This directory should contain most FoxEnhanced-specific code over time, while upstream modules
+remain responsible only for exposing or invoking named extension points.
+
 ### `src/helpers/`
 
 Lower-level utility and browser integration layer. This includes direct browser API interactions and focused utility modules that do not need Vue lifecycle semantics.
@@ -116,6 +131,7 @@ Use these quick rules when deciding where a change should live:
 - View-only wiring for popup: `src/popup/`
 - View-only wiring for settings/options: `src/options/`
 - Browser event lifecycle or extension startup logic: `src/background/` or `src/helpers/`
+- Fork-owned additive hooks, transforms, wrappers, and registration: `src/fox-enhancements/`
 - Reusable stateful logic with Vue reactivity: `src/composables/`
 - Pure utility or browser API wrapper: `src/helpers/`
 - Manifest/permissions/package shape: `src/manifest.ts` or `scripts/`

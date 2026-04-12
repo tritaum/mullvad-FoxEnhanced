@@ -89,6 +89,15 @@ npm run lint && npm run tsc && npm test && npm run build
 - Prefer small, testable changes in composables/helpers before pushing more logic into Vue components.
 - Add or update Vitest coverage when changing reusable logic, sorting, proxy helpers, or location/recommendation behavior.
 
+## FoxEnhancements Rules
+
+- Prefer placing new fork-specific logic in `src/fox-enhancements/`.
+- If a named extension point already exists, use it instead of editing upstream business logic directly.
+- When core integration is necessary, add the smallest possible hook point in upstream code and keep the FoxEnhanced behavior behind that hook.
+- Core-touch changes should read like `register hook` or `invoke hook`, not like fork-owned business logic living inline in upstream modules.
+- Prefer explicit hook APIs, additive UI insertion, typed transforms, and before/after wrappers over full replacements.
+- Do not use Vite alias hijacking, arbitrary module monkey-patching, template transforms, or hidden code injection as the default patch mechanism.
+
 ## Commit Guidance
 
 - Commit focused, reviewable changes rather than broad mixed-purpose edits.
@@ -101,6 +110,7 @@ npm run lint && npm run tsc && npm test && npm run build
 - `src/popup/`: popup app shown from the browser toolbar button
 - `src/options/`: full options/settings page
 - `src/background/`: background page and browser event wiring
+- `src/fox-enhancements/`: fork-owned hook registries, bootstrap hooks, transforms, wrappers, and future additive FoxEnhanced modules
 - `src/components/`: shared Vue UI components used across views
 - `src/composables/`: reusable stateful logic and browser-facing hooks
 - `src/helpers/`: lower-level browser API, proxy, tab, and utility code
@@ -124,5 +134,6 @@ That structure is worth keeping. For this fork, the main adjustment is product d
 
 - `.agent/README.md`
 - `.agent/development-workflow.md`
+- [.agent/fox-enhancements.md](/workspaces/mullvad-foxenhanced/.agent/fox-enhancements.md)
 - `.agent/project-structure.md`
 - `.agent/upstream-organization.md`
