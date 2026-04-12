@@ -33,6 +33,12 @@ files.
 The preferred home for fork-specific code is `src/fox-enhancements/`. The purpose of that directory
 is to keep FoxEnhanced behavior auditable and easy to diff against upstream Mullvad changes.
 
+Manifest and package identity are intentionally treated differently from additive FoxEnhanced UI:
+
+- build-time extension identity stays upstream-owned
+- manifest-defined icons and packaged asset references stay upstream-owned
+- FoxEnhanced-specific labels, badges, links, and patch metadata should be additive UI driven from hooks
+
 This approach is feasible in this codebase, but not through opaque runtime monkey-patching.
 Because this project uses Vue 3, Vite, and ESM modules, hidden code injection and arbitrary module
 rewriting would be harder to verify and easier to distrust. The safer approach is a pragmatic one:
@@ -105,7 +111,8 @@ This project is based on the official upstream repository:
 - upstream releases: [GitHub Releases](https://github.com/mullvad/browser-extension/releases)
 
 The codebase remains GPL-licensed. However, upstream branding and logos belong to Mullvad. This
-fork therefore identifies itself as an unofficial fork and uses distinct fork artwork.
+fork therefore identifies itself as an unofficial fork in documentation and additive UI, while
+keeping build-time extension identity aligned with upstream.
 
 From a maintenance perspective, this repository should be treated as an enhancement layer over the
 official extension rather than a long-lived divergence from it.
@@ -170,7 +177,7 @@ local storage). It will require some manual configuration:
 
 ## Permissions
 
-Mullvad FoxEnhanced keeps the same default permissions as the upstream Mullvad extension:
+This fork keeps the same default permissions as the upstream Mullvad extension:
 
 - `management` to be able to recommend third party extensions
 - `privacy` to disable webRTC and check HTTPS-Only status

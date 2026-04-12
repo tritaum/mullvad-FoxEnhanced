@@ -5,7 +5,7 @@ global.browser = {
   runtime: {
     getManifest: vi.fn(() => ({
       version: '0.9.8',
-      name: 'Mullvad FoxEnhanced',
+      name: 'Mullvad Browser Extension',
     })),
     sendMessage: vi.fn(),
     onMessage: {
