@@ -86,12 +86,14 @@ npm run lint && npm run tsc && npm test && npm run build
 - Treat `extension/manifest.json`, `extension/README.md`, `extension/LICENSE.md`, and `extension/dist/` as generated/package output.
 - Update `src/manifest.ts` when manifest behavior needs to change.
 - Keep Firefox as the default mental model when reviewing UX and API choices.
+- Treat `.agent/uncodixfy.md` as a fundamental UI/UX skill for any fork-owned interface work.
 - Prefer small, testable changes in composables/helpers before pushing more logic into Vue components.
 - Add or update Vitest coverage when changing reusable logic, sorting, proxy helpers, or location/recommendation behavior.
 
 ## FoxEnhancements Rules
 
 - Prefer placing new fork-specific logic in `src/fox-enhancements/`.
+- Keep manifest/package identity upstream-owned unless there is a deliberate reason to diverge that cannot be expressed as additive UI or hooks.
 - If a named extension point already exists, use it instead of editing upstream business logic directly.
 - When core integration is necessary, add the smallest possible hook point in upstream code and keep the FoxEnhanced behavior behind that hook.
 - Core-touch changes should read like `register hook` or `invoke hook`, not like fork-owned business logic living inline in upstream modules.
@@ -136,4 +138,5 @@ That structure is worth keeping. For this fork, the main adjustment is product d
 - `.agent/development-workflow.md`
 - [.agent/fox-enhancements.md](/workspaces/mullvad-foxenhanced/.agent/fox-enhancements.md)
 - `.agent/project-structure.md`
+- `.agent/uncodixfy.md`
 - `.agent/upstream-organization.md`

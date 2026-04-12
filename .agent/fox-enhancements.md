@@ -5,6 +5,9 @@
 FoxEnhanced should aim to keep most fork-specific behavior in `src/fox-enhancements/` instead of
 spreading it throughout upstream modules.
 
+When that behavior includes UI, treat `.agent/uncodixfy.md` as the default design guidance for
+fork-owned surfaces.
+
 The goal is auditability:
 
 - upstream behavior stays easy to compare against Mullvad
@@ -24,6 +27,7 @@ The safer model is a pragmatic one:
 - keep upstream code visually close to upstream
 - add a small number of explicit extension points
 - move the actual FoxEnhanced behavior behind those extension points
+- keep manifest/package identity upstream-owned when the change is not honestly hookable
 
 ## Best Hook Boundaries In This Repo
 
@@ -63,6 +67,7 @@ Examples of good patterns:
 - applying a transform to a derived list before rendering
 - wrapping a proxy-setting action with a small before/after policy layer
 - inserting an extra panel from a top-level container hook
+- rendering additive About-tab labels from a FoxEnhanced registry while leaving the base component upstream-like
 
 ## Not Recommended
 
@@ -71,6 +76,7 @@ Examples of good patterns:
 - patching compiled component internals
 - large fork-only branches embedded directly in upstream business logic
 - build-time magic that hides where FoxEnhanced behavior is coming from
+- pretending manifest icons, package metadata, or Gecko identity are runtime-hookable when they are not
 
 ## Auditability Rule
 
