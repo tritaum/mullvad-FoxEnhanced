@@ -137,3 +137,4 @@ For day-to-day work, `npm start` is usually faster and easier.
 - Keep changes easy to reapply on top of the latest official Mullvad extension updates.
 - Treat `main` as the branch that should absorb upstream updates first, then reapply FoxEnhanced patches cleanly.
 - Keep FoxEnhanced patch version metadata separate from upstream-owned package/manifest version fields when possible.
+- Prefer fork-owned implementations under `src/fox-enhancements/` and only add small upstream hook points when integration is required.

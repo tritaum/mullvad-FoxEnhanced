@@ -25,6 +25,65 @@ This repository is intended to behave like a patch layer on top of the official 
 branch should track the latest official Mullvad updates, with FoxEnhanced changes maintained as a
 small, reviewable set of patches on top.
 
+## FoxEnhanced Patch Architecture
+
+FoxEnhanced should prefer a contained patch model instead of scattering fork logic across upstream
+files.
+
+The preferred home for fork-specific code is `src/fox-enhancements/`. The purpose of that directory
+is to keep FoxEnhanced behavior auditable and easy to diff against upstream Mullvad changes.
+
+Manifest and package identity are intentionally treated differently from additive FoxEnhanced UI:
+
+- build-time extension identity stays upstream-owned
+- manifest-defined icons and packaged asset references stay upstream-owned
+- FoxEnhanced-specific labels, badges, links, and patch metadata should be additive UI driven from hooks
+
+This approach is feasible in this codebase, but not through opaque runtime monkey-patching.
+Because this project uses Vue 3, Vite, and ESM modules, hidden code injection and arbitrary module
+rewriting would be harder to verify and easier to distrust. The safer approach is a pragmatic one:
+keep upstream behavior as the baseline, add named extension points in a few core places, and keep
+the fork-owned logic behind those extension points.
+
+Current recommended hook model:
+
+- **bootstrap hooks**: popup and options `main.ts`, plus `background/main.ts`, may invoke
+  FoxEnhanced bootstrap hooks before mount or immediately after baseline startup
+- **UI insertion hooks**: additive FoxEnhanced panels, cards, labels, or tabs should attach from
+  top-level UI containers instead of rewriting leaf components where possible
+- **derived-data hooks**: transformed lists, recommendation sets, or view models should prefer
+  explicit transform hooks over in-place rewrites of upstream logic
+- **action wrappers**: when FoxEnhanced needs before/after behavior around an operation, wrap the
+  action through a named helper instead of replacing the whole upstream implementation
+
+Core-facing contract:
+
+- upstream files may **invoke** named FoxEnhanced hook points
+- fork-specific logic should live in `src/fox-enhancements/`
+- hook APIs should be explicit and typed
+- additive behavior is preferred first, before/after wrapping second, full replacement only when
+  there is no safe additive option
+
+Good hook boundaries in this repository today:
+
+- popup `main.ts`
+- options `main.ts`
+- background `main.ts`
+- selected composables for additive transforms or wrappers
+- selected top-level UI containers for additive UI surfaces
+
+What is not recommended:
+
+- rewriting random upstream modules through Vite aliases
+- monkey-patching arbitrary module imports at runtime
+- patching compiled Vue component internals
+- replacing upstream logic wholesale when an additive wrapper is enough
+- hiding fork behavior in magic build transforms that make attestation harder
+
+This is the target containment model for future FoxEnhanced work. The repository is not yet fully
+migrated to it, so new patches should move toward this architecture incrementally rather than
+pretend the migration is already complete.
+
 ## Fork principles
 
 - upstream defaults stay the defaults here
@@ -52,7 +111,8 @@ This project is based on the official upstream repository:
 - upstream releases: [GitHub Releases](https://github.com/mullvad/browser-extension/releases)
 
 The codebase remains GPL-licensed. However, upstream branding and logos belong to Mullvad. This
-fork therefore identifies itself as an unofficial fork and uses distinct fork artwork.
+fork therefore identifies itself as an unofficial fork in documentation and additive UI, while
+keeping build-time extension identity aligned with upstream.
 
 From a maintenance perspective, this repository should be treated as an enhancement layer over the
 official extension rather than a long-lived divergence from it.
@@ -117,7 +177,7 @@ local storage). It will require some manual configuration:
 
 ## Permissions
 
-Mullvad FoxEnhanced keeps the same default permissions as the upstream Mullvad extension:
+This fork keeps the same default permissions as the upstream Mullvad extension:
 
 - `management` to be able to recommend third party extensions
 - `privacy` to disable webRTC and check HTTPS-Only status
