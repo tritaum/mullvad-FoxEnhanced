@@ -38,6 +38,7 @@ The fork does not need a radically different architecture right away. The better
 - When behavior differs between Firefox and Mullvad Browser, document the reason in code or docs.
 - Favor changes that make local Firefox development and testing easier, since that is the core audience for this fork.
 - Prefer modifications that are straightforward to replay or rebase after upstream Mullvad releases.
+- Prefer small upstream hook points plus `src/fox-enhancements/` over hiding FoxEnhanced logic inside upstream modules.
 
 ## Current Build Philosophy From Upstream
 

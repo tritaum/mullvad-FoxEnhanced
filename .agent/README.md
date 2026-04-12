@@ -13,6 +13,7 @@ Versioning guidance:
 ## Files
 
 - `development-workflow.md`: install, run, test, build, and package flows
+- `fox-enhancements.md`: containment model, extension-point guidance, and auditability rules for fork-owned patches
 - `project-structure.md`: file hierarchy and where different responsibilities live
 - `upstream-organization.md`: simple notes on how the original Mullvad team organized the extension and how this fork should interpret that structure
 
