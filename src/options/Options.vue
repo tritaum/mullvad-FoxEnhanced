@@ -8,9 +8,11 @@ import ProxyTab from '@/components/OptionsTabs/ProxyTab.vue';
 import SettingsTab from '@/components/OptionsTabs/SettingsTab.vue';
 
 import useStore from '@/composables/useStore';
+import { getFoxEnhancementOptionsTabs } from '@/fox-enhancements/options/tabs';
 
 const { optionsActiveTab } = useStore();
-const defaultTab = computed(() => optionsActiveTab.value);
+const defaultTab = computed(() => optionsActiveTab.value as string);
+const foxEnhancementOptionsTabs = getFoxEnhancementOptionsTabs();
 </script>
 
 <template>
@@ -36,6 +38,15 @@ const defaultTab = computed(() => optionsActiveTab.value);
 
       <n-tab-pane name="import-export" tab="Import/Export">
         <ImportExportTab />
+      </n-tab-pane>
+
+      <n-tab-pane
+        v-for="tab in foxEnhancementOptionsTabs"
+        :key="tab.id"
+        :name="tab.id"
+        :tab="tab.label"
+      >
+        <component :is="tab.component" />
       </n-tab-pane>
 
       <n-tab-pane name="about" tab="About">

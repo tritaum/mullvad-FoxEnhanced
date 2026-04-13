@@ -1,5 +1,7 @@
 import { vi } from 'vitest';
 
+Object.assign(globalThis, { __DEV__: false });
+
 // Mock browser API
 global.browser = {
   runtime: {
@@ -11,6 +13,9 @@ global.browser = {
     onMessage: {
       addListener: vi.fn(),
     },
+  },
+  search: {
+    get: vi.fn(async () => []),
   },
   storage: {
     local: {

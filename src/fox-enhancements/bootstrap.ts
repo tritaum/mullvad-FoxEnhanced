@@ -2,6 +2,7 @@ import './register';
 
 export {
   applyDerivedDataTransforms,
+  createFoxEnhancementPatchRuntime,
   registerBackgroundBootstrapHook,
   registerOptionsBootstrapHook,
   registerPopupBootstrapHook,
@@ -9,4 +10,5 @@ export {
   runBackgroundBootstrapHooks,
   runOptionsBootstrapHooks,
   runPopupBootstrapHooks,
+  stopAllFoxEnhancementPatchRuntimesForTesting,
 } from './runtime';

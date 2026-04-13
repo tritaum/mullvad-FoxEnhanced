@@ -1,19 +1,16 @@
-import { createApp, nextTick, type App as VueApp, type ComponentPublicInstance } from 'vue';
+import { createApp, type App as VueApp } from 'vue';
 
-import { registerFoxEnhancementModule } from '../modules';
-import { registerOptionsBootstrapHook } from '../runtime';
+import { registerFoxEnhancementPatch } from '../modules';
 import FoxEnhancedAbout from './FoxEnhancedAbout.vue';
 
 const foxEnhancedAboutMountId = 'fox-enhancements-about';
 
-let mountedAboutApp: VueApp | undefined;
-let mountedAboutNode: HTMLElement | undefined;
-let foxEnhancedAboutObserver: MutationObserver | undefined;
-
-registerFoxEnhancementModule({
-  id: 'fox-enhanced-about',
-  label: 'FoxEnhancedAbout',
-});
+interface FoxEnhancedAboutControllerState {
+  observer?: MutationObserver;
+  mountedApp?: VueApp;
+  mountedNode?: HTMLElement;
+  hiddenAboutRow?: HTMLElement;
+}
 
 function findAboutHeaderRow() {
   const aboutHeaderRows = Array.from(
@@ -36,81 +33,81 @@ function findAboutHeaderRow() {
   return undefined;
 }
 
-function hideUpstreamAboutHeaderRow(aboutHeaderRow: HTMLElement) {
+function hideUpstreamAboutHeaderRow(state: FoxEnhancedAboutControllerState, aboutHeaderRow: HTMLElement) {
+  state.hiddenAboutRow = aboutHeaderRow;
   aboutHeaderRow.style.display = 'none';
 }
 
-function resetDetachedMount() {
-  if (mountedAboutNode?.isConnected) {
-    return;
-  }
-
-  mountedAboutApp?.unmount();
-  mountedAboutApp = undefined;
-  mountedAboutNode = undefined;
+function restoreUpstreamAboutHeaderRow(state: FoxEnhancedAboutControllerState) {
+  state.hiddenAboutRow?.style.removeProperty('display');
+  state.hiddenAboutRow = undefined;
 }
 
-function mountFoxEnhancedAbout() {
-  resetDetachedMount();
-
+function mountFoxEnhancedAbout(state: FoxEnhancedAboutControllerState) {
   const aboutHeaderRow = findAboutHeaderRow();
   if (!aboutHeaderRow?.parentElement) {
     return;
   }
 
-  hideUpstreamAboutHeaderRow(aboutHeaderRow);
+  hideUpstreamAboutHeaderRow(state, aboutHeaderRow);
 
-  if (mountedAboutNode) {
-    if (mountedAboutNode.previousElementSibling !== aboutHeaderRow) {
-      aboutHeaderRow.insertAdjacentElement('afterend', mountedAboutNode);
-    }
+  if (!state.mountedNode) {
+    const mountNode = document.createElement('div');
+    mountNode.id = foxEnhancedAboutMountId;
 
-    return;
+    const aboutApp = createApp(FoxEnhancedAbout);
+    aboutApp.mount(mountNode);
+
+    state.mountedNode = mountNode;
+    state.mountedApp = aboutApp;
   }
 
-  const mountNode = document.createElement('div');
-  mountNode.id = foxEnhancedAboutMountId;
-  aboutHeaderRow.insertAdjacentElement('afterend', mountNode);
-
-  const aboutApp = createApp(FoxEnhancedAbout);
-  aboutApp.mount(mountNode);
-
-  mountedAboutNode = mountNode;
-  mountedAboutApp = aboutApp;
+  if (state.mountedNode.previousElementSibling !== aboutHeaderRow) {
+    aboutHeaderRow.insertAdjacentElement('afterend', state.mountedNode);
+  }
 }
 
-function startFoxEnhancedAboutObserver() {
-  if (foxEnhancedAboutObserver) {
-    return;
-  }
+function startFoxEnhancedAboutController() {
+  const state: FoxEnhancedAboutControllerState = {};
 
-  foxEnhancedAboutObserver = new MutationObserver(() => {
-    mountFoxEnhancedAbout();
+  state.observer = new MutationObserver(() => {
+    mountFoxEnhancedAbout(state);
   });
 
-  foxEnhancedAboutObserver.observe(document.body, {
+  state.observer.observe(document.body, {
     childList: true,
     subtree: true,
   });
 
-  mountFoxEnhancedAbout();
+  mountFoxEnhancedAbout(state);
+
+  return state;
 }
 
-registerOptionsBootstrapHook(({ app }) => {
-  let initialized = false;
+function stopFoxEnhancedAboutController(state: FoxEnhancedAboutControllerState | undefined) {
+  if (!state) {
+    return;
+  }
 
-  app.mixin({
-    mounted() {
-      const component = this as ComponentPublicInstance;
+  state.observer?.disconnect();
+  state.mountedApp?.unmount();
+  state.mountedNode?.remove();
+  restoreUpstreamAboutHeaderRow(state);
+}
 
-      if (initialized || component !== component.$root) {
-        return;
-      }
+let controllerState: FoxEnhancedAboutControllerState | undefined;
 
-      initialized = true;
-      void nextTick().then(() => {
-        startFoxEnhancedAboutObserver();
-      });
-    },
-  });
+registerFoxEnhancementPatch({
+  id: 'fox-enhanced-about',
+  label: 'FoxEnhanced About',
+  description: 'Replaces the upstream About header with fork-owned FoxEnhanced metadata.',
+  targets: ['options'],
+  defaultEnabled: false,
+  setup() {
+    controllerState ??= startFoxEnhancedAboutController();
+  },
+  teardown() {
+    stopFoxEnhancedAboutController(controllerState);
+    controllerState = undefined;
+  },
 });

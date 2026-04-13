@@ -93,12 +93,14 @@ npm run lint && npm run tsc && npm test && npm run build
 ## FoxEnhancements Rules
 
 - Prefer placing new fork-specific logic in `src/fox-enhancements/`.
+- Treat `.agent/foxenhanced-mindset.md` and `.agent/pragmatic-containment.md` as standing AI/contributor instructions before touching Mullvad-owned code.
 - Keep manifest/package identity upstream-owned unless there is a deliberate reason to diverge that cannot be expressed as additive UI or hooks.
 - If a named extension point already exists, use it instead of editing upstream business logic directly.
 - When core integration is necessary, add the smallest possible hook point in upstream code and keep the FoxEnhanced behavior behind that hook.
 - Core-touch changes should read like `register hook` or `invoke hook`, not like fork-owned business logic living inline in upstream modules.
 - Prefer explicit hook APIs, additive UI insertion, typed transforms, and before/after wrappers over full replacements.
 - Do not use Vite alias hijacking, arbitrary module monkey-patching, template transforms, or hidden code injection as the default patch mechanism.
+- Keep FoxEnhanced-specific tests, mocks, and Vitest setup under `src/fox-enhancements/tests/` unless they are truly shared across the whole repository.
 
 ## Commit Guidance
 
@@ -137,6 +139,8 @@ That structure is worth keeping. For this fork, the main adjustment is product d
 - `.agent/README.md`
 - `.agent/development-workflow.md`
 - [.agent/fox-enhancements.md](/workspaces/mullvad-foxenhanced/.agent/fox-enhancements.md)
+- `.agent/foxenhanced-mindset.md`
+- `.agent/pragmatic-containment.md`
 - `.agent/project-structure.md`
 - `.agent/uncodixfy.md`
 - `.agent/upstream-organization.md`
