@@ -2,15 +2,14 @@
 import FeInfo from '@/components/Icons/FeInfo.vue';
 import { version } from '@/helpers/browserExtension';
 
-import FePuzzlePiece from '../components/FePuzzlePiece.vue';
 import { foxEnhancementPatchVersion } from '../metadata';
-import { getFoxEnhancementModules } from '../modules';
+import { getRegisteredFoxEnhancementPatches } from '../modules';
 import FoxEnhancedBadge from '../ui/FoxEnhancedBadge.vue';
 import FoxEnhancedBadgeBase from '../ui/FoxEnhancedBadgeBase.vue';
 import FoxEnhancedCard from '../ui/FoxEnhancedCard.vue';
 import FoxEnhancedRepoBadge from '../ui/FoxEnhancedRepoBadge.vue';
 
-const activeModuleCount = getFoxEnhancementModules().length;
+const registeredPatchCount = getRegisteredFoxEnhancementPatches().length;
 </script>
 
 <template>
@@ -49,9 +48,9 @@ const activeModuleCount = getFoxEnhancementModules().length;
           </FoxEnhancedBadge>
           <FoxEnhancedBadge>
             <template #icon>
-              <FePuzzlePiece />
+              <span aria-hidden="true">⚙️</span>
             </template>
-            {{ activeModuleCount }} Active modules
+            {{ registeredPatchCount }} Active modules
           </FoxEnhancedBadge>
         </div>
         <div class="fox-about-row fox-about-row-secondary">

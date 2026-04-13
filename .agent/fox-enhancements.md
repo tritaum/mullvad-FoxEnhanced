@@ -5,6 +5,18 @@
 FoxEnhanced should aim to keep most fork-specific behavior in `src/fox-enhancements/` instead of
 spreading it throughout upstream modules.
 
+Treat `.agent/foxenhanced-mindset.md` as a standing skill:
+
+- evade edits to Mullvad-owned source whenever a credible fork-layer path exists
+- default to additive FoxEnhanced-owned code first
+- treat upstream changes as escalation, not convenience
+
+Treat `.agent/pragmatic-containment.md` as the enforcement protocol:
+
+- run the containment ladder before editing Mullvad-owned files
+- require a brief containment note when an upstream edit is truly necessary
+- keep FoxEnhanced-specific tests, mocks, and setup under `src/fox-enhancements/tests/`
+
 When that behavior includes UI, treat `.agent/uncodixfy.md` as the default design guidance for
 fork-owned surfaces.
 
@@ -28,6 +40,7 @@ The safer model is a pragmatic one:
 - add a small number of explicit extension points
 - move the actual FoxEnhanced behavior behind those extension points
 - keep manifest/package identity upstream-owned when the change is not honestly hookable
+- resist direct upstream edits even when they look faster in the short term
 
 ## Best Hook Boundaries In This Repo
 
@@ -52,6 +65,12 @@ When adding FoxEnhanced behavior:
 4. Keep the core-side change generic and named.
 5. Avoid mixing feature logic into upstream modules unless there is no safer alternative.
 
+Before editing any Mullvad-owned file, explicitly test this question:
+
+- Can this be done as a FoxEnhanced-owned registry, runtime, transform, wrapper, or additive DOM/UI insertion instead?
+
+If the answer is yes, do that instead of editing upstream code.
+
 ## Recommended Hook Styles
 
 Preferred order:
@@ -71,6 +90,7 @@ Examples of good patterns:
 
 ## Not Recommended
 
+- editing upstream files just because it is simpler than extending the fork layer
 - Vite alias tricks that silently replace upstream modules
 - monkey-patching arbitrary module imports
 - patching compiled component internals

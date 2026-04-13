@@ -5,3 +5,4 @@
 // extension points.
 
 import './options/FoxEnhancedAbout';
+import './options/FoxEnhancedMenu';
